@@ -10,10 +10,16 @@ class AddressService {
 
   private val TitleRegex = """<title>([^<]+)</title>""".r
 
+  def getTitle(method: String, address: String) = method match {
+    case "nonblocking" => getTitleNonBlocking(address)
+    case "async"       => getTitleAsync(address)
+  }
+
   def getTitleBlocking(address: String) = Try {
     val responseBody = io.Source.fromURL(s"http://$address").mkString
     extract(responseBody)
   }.getOrElse("ERROR")
+
 
   def getTitleAsync(address: String) = future {
     val responseBody = io.Source.fromURL(s"http://$address").mkString
@@ -24,7 +30,6 @@ class AddressService {
     WS.url(s"http://$address").get().map { response =>
       extract(response.body)
     }.recover(error(address))
-
 
   private def extract(body: String) =
     TitleRegex.findFirstMatchIn(body).map(_.group(1)).getOrElse("NO TITLE")

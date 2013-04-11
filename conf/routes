@@ -3,7 +3,8 @@
 # ~~~~
 
 # Home page
-GET     /title/*address             controllers.Application.getTitle(address)
+GET     /title/blocking/*address            controllers.Application.getTitleBlocking(address)
+GET     /title/:method/*address             controllers.Application.getTitle(method, address)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
