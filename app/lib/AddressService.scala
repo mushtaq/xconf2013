@@ -31,8 +31,9 @@ class AddressService {
       extract(response.body)
     }.recover(error(address))
 
-  private def extract(body: String) =
+  private def extract(body: String) = {
     TitleRegex.findFirstMatchIn(body).map(_.group(1)).getOrElse("NO TITLE")
+  }
 
   private def error(address: String): PartialFunction[Throwable, String] = {
     case ex: Throwable =>
