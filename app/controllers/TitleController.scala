@@ -2,19 +2,19 @@ package controllers
 
 import play.api.mvc._
 import concurrent.ExecutionContext.Implicits.global
-import lib.AddressService
+import lib.TitleService
 import play.api.Logger
 
-object Application extends Controller {
+object TitleController extends Controller {
 
-  private val addressService = new AddressService
+  private val titleService = new TitleService
 
-  def getTitle(method: String, address: String) = Action {
+  def getTitle(address: String) = Action {
 
     Logger.debug(s"received request for $address")
 
     Async {
-      val titleFuture = addressService.getTitle(method, address)
+      val titleFuture = titleService.getTitle(address)
       titleFuture.map { title =>
         Logger.info(s"Title for $address is ${title.trim.lines.next()}")
         Ok(title)
@@ -26,7 +26,7 @@ object Application extends Controller {
 
     Logger.debug(s"received request for $address")
 
-    val title = addressService.getTitleBlocking(address)
+    val title = titleService.getTitleBlocking(address)
     Logger.info(s"Title for $address is ${title.trim.lines.next()}")
     Ok(title)
   }

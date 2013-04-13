@@ -1,10 +1,10 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
 
-# Home page
-GET     /title/blocking/*address            controllers.Application.getTitleBlocking(address)
-GET     /title/:method/*address             controllers.Application.getTitle(method, address)
+GET     /titles/nonblocking/:count                     controllers.BulkTitleController.getTitles(count: Int)
+GET     /titles/blocking/:count                        controllers.BulkTitleController.getTitlesBlocking(count: Int)
+
+GET     /title/nonblocking/*address                    controllers.TitleController.getTitle(address)
+GET     /title/blocking/*address                       controllers.TitleController.getTitleBlocking(address)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
