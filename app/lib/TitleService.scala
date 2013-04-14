@@ -3,27 +3,26 @@ package lib
 import play.api.libs.ws.WS
 import concurrent.ExecutionContext.Implicits.global
 import scala.util.Try
-import scala.concurrent._
 import play.api.Logger
+import wrappers.TapperImplicits.Tapper
+import scala.concurrent.Future
 
 class TitleService {
 
   private val TitleRegex = """<title>([^<]+)</title>""".r
 
-  def getTitle(address: String) =
+  def getTitle(address: String): Future[String] = {
+    address.tap("request: Getting title for")
     WS.url(s"http://$address").get().map { response =>
-      extract(response.body)
+      extract(response.body).tap(s"RESPONSE: Title for $address is")
     }.recover(error(address))
+  }
 
-  def getTitleBlocking(address: String) = Try {
+  def getTitleBlocking(address: String): String = Try {
+    address.tap("request: Getting title for")
     val responseBody = io.Source.fromURL(s"http://$address").mkString
-    extract(responseBody)
+    extract(responseBody).tap(s"RESPONSE: Title for $address is")
   }.getOrElse("ERROR")
-
-  def getTitleAsync(address: String) = future {
-    val responseBody = io.Source.fromURL(s"http://$address").mkString
-    extract(responseBody)
-  }.recover(error(address))
 
   private def extract(body: String) = {
     TitleRegex.findFirstMatchIn(body).map(_.group(1)).getOrElse("NO TITLE").trim.lines.next()
