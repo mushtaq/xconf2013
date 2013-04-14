@@ -1,9 +1,9 @@
 
-GET     /titles/nonblocking/:count                     controllers.BulkTitleController.getTitles(count: Int)
-GET     /titles/blocking/:count                        controllers.BulkTitleController.getTitlesBlocking(count: Int)
+GET     /titles/nonblocking/:count                     controllers.BulkTitleController.getTitlesNonBlocking(count: Int)
+GET     /titles/blocking/:count                        controllers.BulkTitleController.getTitles(count: Int)
 
-GET     /title/nonblocking/*address                    controllers.TitleController.getTitle(address)
-GET     /title/blocking/*address                       controllers.TitleController.getTitleBlocking(address)
+GET     /title/nonblocking/*address                    controllers.TitleController.getTitleNonBlocking(address)
+GET     /title/blocking/*address                       controllers.TitleController.getTitle(address)
 
 
 # Map static resources from the /public folder to the /assets URL path

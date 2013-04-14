@@ -8,17 +8,19 @@ object TitleController extends Controller {
 
   private val titleService = new TitleService
 
-  def getTitle(address: String) = Action {
+  def getTitleNonBlocking(address: String) = Action {
 
     Async {
-      val titleFuture = titleService.getTitle(address)
-      titleFuture.map(Ok(_))
+      val titleFuture = titleService.getTitleFuture(address)
+      titleFuture.map { title =>
+        Ok(title)
+      }
     }
   }
 
-  def getTitleBlocking(address: String) = Action {
+  def getTitle(address: String) = Action {
 
-    val title = titleService.getTitleBlocking(address)
+    val title = titleService.getTitle(address)
     Ok(title)
   }
 }

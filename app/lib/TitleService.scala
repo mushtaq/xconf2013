@@ -11,16 +11,16 @@ class TitleService {
 
   private val TitleRegex = """<title>([^<]+)</title>""".r
 
-  def getTitle(address: String): Future[String] = {
+  def getTitleFuture(address: String): Future[String] = {
     address.tap("request: Getting title for")
     WS.url(s"http://$address").get().map { response =>
       extract(response.body).tap(s"RESPONSE: Title for $address is")
     }.recover(error(address))
   }
 
-  def getTitleBlocking(address: String): String = Try {
+  def getTitle(address: String): String = Try {
     address.tap("request: Getting title for")
-    val responseBody = io.Source.fromURL(s"http://$address").mkString
+    val responseBody = io.Source.fromURL(s"http://$address").getLines().mkString
     extract(responseBody).tap(s"RESPONSE: Title for $address is")
   }.getOrElse("ERROR")
 

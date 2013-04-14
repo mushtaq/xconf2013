@@ -6,10 +6,24 @@ import scala.util.Random
 
 class BulkTitleService {
 
-  def getTitles(count: Int) = Future.traverse(getRandomAddreses(count))(titleService.getTitle)
-  def getTitlesBlocking(count: Int) = getRandomAddreses(count).map(titleService.getTitleBlocking)
+  def getTitlesFuture(count: Int): Future[Vector[String]] = {
+    val addresses = getRandomAddresses(count)
+
+    Future.traverse(addresses) { address =>
+      titleService.getTitleFuture(address)
+    }
+  }
+
+  def getTitles(count: Int): Vector[String] = {
+    val addresses = getRandomAddresses(count)
+
+    addresses.map { address =>
+      titleService.getTitle(address)
+    }
+  }
 
   private lazy val titleService = new TitleService
-  private lazy val addresses = io.Source.fromFile("conf/addresses.txt").getLines().to[Vector].take(500)
-  private def getRandomAddreses(count: Int) = Random.shuffle(addresses).take(count)
+  private lazy val allAddresses = io.Source.fromFile("conf/addresses.txt").getLines().to[Vector].take(500)
+
+  private def getRandomAddresses(count: Int) = Random.shuffle(allAddresses).take(count)
 }

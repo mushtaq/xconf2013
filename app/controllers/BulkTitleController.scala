@@ -8,15 +8,15 @@ object BulkTitleController extends Controller {
 
   private val bulkTitleService = new BulkTitleService
 
-  def getTitles(count: Int) = Action {
+  def getTitlesNonBlocking(count: Int) = Action {
     Async {
-      val titlesFuture = bulkTitleService.getTitles(count)
+      val titlesFuture = bulkTitleService.getTitlesFuture(count)
       titlesFuture.map { titles => Ok(titles.mkString("\n")) }
     }
   }
 
-  def getTitlesBlocking(count: Int) = Action {
-    val titles = bulkTitleService.getTitlesBlocking(count: Int)
+  def getTitles(count: Int) = Action {
+    val titles = bulkTitleService.getTitles(count: Int)
     Ok(titles.mkString("\n"))
   }
 }
