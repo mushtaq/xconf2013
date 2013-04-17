@@ -5,7 +5,7 @@ import concurrent.ExecutionContext.Implicits.global
 import scala.util.Try
 import play.api.Logger
 import wrappers.TapperImplicits.Tapper
-import scala.concurrent.Future
+import scala.concurrent._
 
 class TitleService {
 
@@ -33,4 +33,12 @@ class TitleService {
       Logger.error(s"Error in getting title for: $address. Error msg is: ${ex.getMessage}")
       "ERROR"
   }
+
+  def getTitleMix(address: String): Future[String] = {
+    address.tap("request: Getting title for")
+    future(io.Source.fromURL(s"http://$address").getLines().mkString).map { body =>
+      extract(body).tap(s"RESPONSE: Title for $address is")
+    }.recover(error(address))
+  }
+
 }
