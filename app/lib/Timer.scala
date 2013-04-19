@@ -2,7 +2,7 @@ package lib
 
 import scala.concurrent._
 import concurrent.duration._
-import ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import Utils._
 
 object Timer {

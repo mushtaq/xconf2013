@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc._
-import concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.BulkTitleService
 
 object BulkTitleController extends Controller {
@@ -10,13 +10,20 @@ object BulkTitleController extends Controller {
 
   def getTitlesNonBlocking(count: Int) = Action {
     Async {
-      val titlesFuture = bulkTitleService.getTitlesFuture(count)
+      val titlesFuture = bulkTitleService.getTitlesNonBlocking(count)
       titlesFuture.map { titles => Ok(titles.mkString("\n")) }
     }
   }
 
-  def getTitles(count: Int) = Action {
-    val titles = bulkTitleService.getTitles(count: Int)
+  def getTitlesBlocking(count: Int) = Action {
+    val titles = bulkTitleService.getTitlesBlocking(count: Int)
     Ok(titles.mkString("\n"))
+  }
+
+  def getTitlesAsync(count: Int) = Action {
+    Async {
+      val titlesFuture = bulkTitleService.getTitlesAsync(count)
+      titlesFuture.map { titles => Ok(titles.mkString("\n")) }
+    }
   }
 }

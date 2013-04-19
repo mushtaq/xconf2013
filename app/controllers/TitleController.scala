@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.mvc._
-import concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import services.TitleService
 
 object TitleController extends Controller {
@@ -11,16 +11,26 @@ object TitleController extends Controller {
   def getTitleNonBlocking(address: String) = Action {
 
     Async {
-      val titleFuture = titleService.getTitleFuture(address)
+      val titleFuture = titleService.getTitleNonBlocking(address)
       titleFuture.map { title =>
         Ok(title)
       }
     }
   }
 
-  def getTitle(address: String) = Action {
+  def getTitleBlocking(address: String) = Action {
 
-    val title = titleService.getTitle(address)
+    val title = titleService.getTitleBlocking(address)
     Ok(title)
+  }
+
+  def getTitleAsync(address: String) = Action {
+
+    Async {
+      val titleFuture = titleService.getTitleAsync(address)
+      titleFuture.map { title =>
+        Ok(title)
+      }
+    }
   }
 }

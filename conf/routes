@@ -1,9 +1,15 @@
 
+GET     /news/nonblocking/:count                     controllers.NewsController.getNewsNonBlocking(count: Int)
+GET     /news/sequential/:count                      controllers.NewsController.getNewsSequential(count: Int)
+GET     /news/parblocking/:count                     controllers.NewsController.getNewsParBlocking(count: Int)
+
 GET     /titles/nonblocking/:count                     controllers.BulkTitleController.getTitlesNonBlocking(count: Int)
-GET     /titles/blocking/:count                        controllers.BulkTitleController.getTitles(count: Int)
+GET     /titles/blocking/:count                        controllers.BulkTitleController.getTitlesBlocking(count: Int)
+GET     /titles/async/:count                           controllers.BulkTitleController.getTitlesAsync(count: Int)
 
 GET     /title/nonblocking/*address                    controllers.TitleController.getTitleNonBlocking(address)
-GET     /title/blocking/*address                       controllers.TitleController.getTitle(address)
+GET     /title/blocking/*address                       controllers.TitleController.getTitleBlocking(address)
+GET     /title/async/*address                          controllers.TitleController.getTitleAsync(address)
 
 
 # Map static resources from the /public folder to the /assets URL path

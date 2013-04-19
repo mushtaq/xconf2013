@@ -15,5 +15,4 @@ object Linking extends App {
     }
     p.future
   }
-
 }

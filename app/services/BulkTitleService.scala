@@ -1,29 +1,39 @@
 package services
 
 import scala.concurrent.Future
-import concurrent.ExecutionContext.Implicits.global
-import scala.util.Random
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 class BulkTitleService {
 
-  def getTitlesFuture(count: Int): Future[Vector[String]] = {
-    val addresses = getRandomAddresses(count)
+  val titleService = new TitleService
 
-    Future.traverse(addresses) { address =>
-      titleService.getTitleFuture(address)
-    }
-  }
+   def getTitlesNonBlocking(count: Int): Future[Vector[String]] = {
+     val addresses = groupedAddresses.next()
 
-  def getTitles(count: Int): Vector[String] = {
-    val addresses = getRandomAddresses(count)
+     Future.traverse(addresses) { address =>
+       titleService.getTitleNonBlocking(address)
+     }
+   }
 
-    addresses.map { address =>
-      titleService.getTitle(address)
-    }
-  }
+   def getTitlesBlocking(count: Int): Vector[String] = {
+     val addresses = groupedAddresses.next()
 
-  private lazy val titleService = new TitleService
-  private lazy val allAddresses = io.Source.fromFile("conf/addresses.txt").getLines().to[Vector].take(500)
+     addresses.map { address =>
+       titleService.getTitleBlocking(address)
+     }
+   }
 
-  private def getRandomAddresses(count: Int) = Random.shuffle(allAddresses).take(count)
-}
+   def getTitlesAsync(count: Int): Future[Vector[String]] = {
+     val addresses = groupedAddresses.next()
+
+     Future.traverse(addresses) { address =>
+       titleService.getTitleAsync(address)
+     }
+   }
+
+
+   private lazy val allAddresses = io.Source.fromFile("conf/addresses.txt").getLines().to[Vector]
+   private lazy val groupedAddresses = allAddresses.grouped(3)
+
+ //  private def getRandomAddresses(count: Int) = allAddresses.grouped(count)
+ }
