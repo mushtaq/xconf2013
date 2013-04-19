@@ -2,7 +2,7 @@ package controllers
 
 import play.api.mvc._
 import concurrent.ExecutionContext.Implicits.global
-import lib.TitleService
+import services.TitleService
 
 object TitleController extends Controller {
 

@@ -1,4 +1,4 @@
-package lib
+package services
 
 import play.api.libs.ws.WS
 import concurrent.ExecutionContext.Implicits.global

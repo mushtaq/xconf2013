@@ -6,11 +6,11 @@ import Utils._
 
 class IOSimulator(sleepTime: Int) {
 
-  def blockingLoop(count: Int) = await(
+  def blockingIO(count: Int) = await(
     loop(count, Thread.sleep(_))
   )
 
-  def nonBlockingLoop(count: Int) = await(
+  def nonBlockingIO(count: Int) = await(
     loop(count, Timer.delay(_))
   )
 

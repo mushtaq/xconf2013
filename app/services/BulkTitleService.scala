@@ -1,4 +1,4 @@
-package lib
+package services
 
 import scala.concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
