@@ -9,11 +9,10 @@ object NewsController extends Controller {
 
   val iter = Iterator.from(0).map(i => (i % 8) + 1)
 
-  def processingTime = iter.next() * 1000
+  def processingTime = iter.next() * 100
   def process() = Thread.sleep(processingTime)
 
   val newsService = new NewsService(3000)
-
 
   def getNewsNonBlocking(count: Int) = Action {
     process()
