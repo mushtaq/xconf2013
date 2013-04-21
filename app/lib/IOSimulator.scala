@@ -1,10 +1,11 @@
 package lib
 
 import concurrent._
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import Utils._
 
 class IOSimulator(sleepTime: Int) {
+
+  import concurrent.ExecutionContext.Implicits.global
 
   val fetchNewsBlocking = (t: Int) => Thread.sleep(t)
   val fetchNewsNonBlocking = (t: Int) => Timer.delay(t)
